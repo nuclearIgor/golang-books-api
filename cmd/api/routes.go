@@ -30,6 +30,8 @@ func (app *application) routes() http.Handler {
 
 	mux.Get("/books/{slug}", app.GetOneBook)
 
+	mux.Post("/users/rotasecreta", app.EditUser)
+
 	mux.Post("/validate-token", app.ValidateToken)
 
 	mux.Route("/admin", func(mux chi.Router) {

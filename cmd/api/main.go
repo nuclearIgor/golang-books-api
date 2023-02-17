@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"reflect"
+	"strconv"
 	"vue-api/internal/data"
 	"vue-api/internal/driver"
 )
@@ -24,7 +26,8 @@ type application struct {
 
 func main() {
 	var cfg config
-	cfg.port = 8081
+	port, _ := strconv.ParseInt(os.Getenv("PORT"), 10, 64)
+	cfg.port = int(port)
 
 	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 	errorLog := log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
@@ -52,10 +55,12 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 }
 
 func (app *application) serve() error {
 	app.infoLog.Println("API listening on port", app.config.port)
+	app.infoLog.Println(reflect.TypeOf(app.config.port))
 
 	srv := &http.Server{
 		Addr:    fmt.Sprintf(":%d", app.config.port),
